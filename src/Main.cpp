@@ -1,12 +1,15 @@
-#include<iostream>
+// This is a personal academic project. Dear PVS-Studio, please check it.
+
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: https://pvs-studio.com
+
 #include <glad/glad.h>
-#include"glfw/glfw3.h"
+#include "glfw/glfw3.h"
+#include <vector>
+#include "shader.h"
 
 
-int main() {
-	
+int main() {	
 	glfwInit();
-
 	if (!glfwInit()) {
 		std::cout << "glfw not initiated" << std::endl;
 		return -1;
@@ -24,9 +27,11 @@ int main() {
 	}
 	
 	glfwMakeContextCurrent(window);
+
+	
 	gladLoadGL();
 	glViewport(0, 0, 800, 800);
-	glClearColor(0.2f, 0.3f, 5.0f, 1.0f);
+	glClearColor(0.3f, 0.2f, 0.5f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	
 
@@ -68,7 +73,13 @@ int main() {
 
 	glEnableVertexAttribArray(0);
 
+	
+	Shader obj;
+	obj.parseShader();
+
 	while (!glfwWindowShouldClose(window)) {
+		glClear(GL_COLOR_BUFFER_BIT);
+		
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
