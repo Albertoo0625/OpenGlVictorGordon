@@ -156,15 +156,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c" />
+    <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\shader.cpp" />
+    <ClCompile Include="src\VertexArray.cpp" />
+    <ClCompile Include="src\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\IndexBuffer.h" />
+    <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\shader.h" />
     <ClInclude Include="src\Dependacies\Include\glad\glad.h" />
     <ClInclude Include="src\Dependacies\Include\GLFW\glfw3.h" />
     <ClInclude Include="src\Dependacies\Include\GLFW\glfw3native.h" />
     <ClInclude Include="src\Dependacies\Include\KHR\khrplatform.h" />
+    <ClInclude Include="src\VertexArray.h" />
+    <ClInclude Include="src\VertexBuffer.h" />
+    <ClInclude Include="src\VertexBufferLayout.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="src\Dependacies\Lib\glfw3.lib" />

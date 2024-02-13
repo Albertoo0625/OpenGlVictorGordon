@@ -2,6 +2,22 @@
 
 shaderType my;
 
+
+
+Shader::Shader(const std::string vertexFilepath, const std::string fragmentFilepath)
+	:m_Renderer_Id(0)
+{
+	ParseReturn P=parseShader(vertexFilepath,fragmentFilepath);
+	std::cout <<"fragment id " << P.fId << std::endl;
+	std::cout << "vertex id " << P.vId << std::endl;
+	m_Renderer_Id = linkShader(P.vId, P.fId);
+}
+
+Shader::~Shader()
+{
+	glDeleteProgram(m_Renderer_Id);
+}
+
 shaderType Shader::get_file_contents(const std::string filepath, const std::string term)
 {
 	std::ifstream contents(filepath);
@@ -41,18 +57,21 @@ shaderType Shader::get_file_contents(const std::string filepath, const std::stri
 	return my;
 }
 
-void Shader::parseShader()
+ParseReturn Shader::parseShader(const std::string vertexFilepath, const std::string fragmentFilepath)
 {
-	shaderType vertexShader = get_file_contents("src/Shaders/default.vert", "vertex");
-	shaderType fragmentShader = get_file_contents("src/Shaders/default.frag", "fragment");
+	shaderType vertexShader = get_file_contents(fragmentFilepath, "vertex");
+	shaderType fragmentShader = get_file_contents(fragmentFilepath, "fragment");
 	const char* vertex = vertexShader.shadercode.c_str();
 	const char* fragment = fragmentShader.shadercode.c_str();
 	unsigned int vId = compileShader(vertexShader.type, vertex);
 	unsigned int fId = compileShader(fragmentShader.type, fragment);
-	linkShader(vId, fId);
+	ParseReturn R;
+	R.vId = vId;
+	R.fId = fId;
+	return R;
 }
 
-unsigned int Shader::compileShader(const unsigned int type, const char* shadersource)
+unsigned int Shader::compileShader(const unsigned int type, const char* shadersource) 
 {
 	unsigned int Renderer_Id = glCreateShader(type);
 	glShaderSource(Renderer_Id, 1, &shadersource, NULL);
@@ -82,12 +101,23 @@ void Shader::compileErrors(unsigned int Renderer_id, const char* type)
 	}
 }
 
-void Shader::linkShader(unsigned int vertexshader, unsigned int fragmentshader)
+unsigned int Shader::linkShader(unsigned int vertexshader, unsigned int fragmentshader)
 {
 	unsigned int ID = glCreateProgram();
 	glAttachShader(ID, vertexshader);
 	glAttachShader(ID, fragmentshader);
 	glLinkProgram(ID);
-	glUseProgram(ID);
+	glValidateProgram(ID);
 	compileErrors(ID, "PROGRAM");
+	return ID;
+}
+
+void Shader::Bind() const 
+{
+	glUseProgram(m_Renderer_Id);
+}
+
+void Shader::Unbind() const
+{
+	glUseProgram(0);
 }
